@@ -43,7 +43,7 @@
         error.hidden = false;
         return;
       }
-      const fee = value >= 10000 ? 0 :
+      const fee = value > 10000 ? 0 :
         (zone.value === "city" ? 1000 : 2000);
       result.textContent = `Доставка: ${fee} ₸. ` +
         `К оплате: ${value + fee} ₸.`;
