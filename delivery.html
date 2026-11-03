@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Расчёт доставки</title>
+</head>
+<body>
+  <h1>Расчёт доставки</h1>
+  <form id="delivery-form" novalidate>
+    <label for="amount">Сумма заказа</label>
+    <input id="amount" type="text" inputmode="numeric">
+    <label for="zone">Зона доставки</label>
+    <select id="zone">
+      <option value="city">Город</option>
+      <option value="region">Регион</option>
+    </select>
+    <button type="submit">Рассчитать</button>
+    <button type="reset">Сбросить</button>
+  </form>
+  <p id="error" role="alert" hidden></p>
+  <p id="result" role="status" hidden></p>
+  <script>
+    const form = document.querySelector("#delivery-form");
+    const amount = document.querySelector("#amount");
+    const zone = document.querySelector("#zone");
+    const error = document.querySelector("#error");
+    const result = document.querySelector("#result");
+
+    function clearMessages() {
+      error.textContent = "";
+      result.textContent = "";
+      error.hidden = true;
+      result.hidden = true;
+    }
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      clearMessages();
+      const raw = amount.value.trim();
+      const value = Number(raw);
+      if (!/^\d+$/.test(raw) || !Number.isSafeInteger(value)) {
+        error.textContent = "Введите целое неотрицательное число";
+        error.hidden = false;
+        return;
+      }
+      const fee = value >= 10000 ? 0 :
+        (zone.value === "city" ? 1000 : 2000);
+      result.textContent = `Доставка: ${fee} ₸. ` +
+        `К оплате: ${value + fee} ₸.`;
+      result.hidden = false;
+    });
+    form.addEventListener("reset", clearMessages);
+  </script>
+</body>
+</html>
